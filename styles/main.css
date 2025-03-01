@@ -1,0 +1,25 @@
+:root {
+  --main-color: #c53d43;
+  --seceond-color: #f1eae0;
+  --third-color: #323233;
+}
+.menu {
+  background-color: var(--seceond-color);
+  /* height: 10vh; */
+}
+tr:hover td {
+  background-color: var(--seceond-color);
+  color: var(--main-color);
+}
+ul > li.nav-item > a {
+  font-weight: bold;
+  /* color: var(--third-color); */
+}
+ul > li.nav-item > a:hover {
+  color: #f1eae0;
+  background-color: var(--main-color);
+}
+.active {
+  color: #f1eae0;
+  background-color: var(--main-color);
+}

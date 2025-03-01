@@ -1,0 +1,101 @@
+<?php
+    require_once('connection.php');
+    class Api extends Connection {
+        public function apibook($condition, $start , $limit){
+            return $this->select("b.*,c.cate_title,bt.type_title,(SELECT AVG(rate_num) 
+            FROM obs_rating WHERE book_id=b.book_id) as rate","obs_books as b 
+            inner join obs_categories as c ON b.category_id=c.cate_id 
+            INNER join obs_booktype as bt on b.type_id=bt.type_id","".$condition."","book_id desc limit ".$start.",".$limit."");
+        }
+        public function apilogin($email,$password){
+            $query = $this->select("*","obs_users","user_email='".$email."' and user_status=1",1);
+            $num = $query->num_rows;
+            if ($num > 0){
+                $pwd = $this->select("user_password","obs_users","user_email='".$email."'",1);
+                while ($row = $pwd->fetch_assoc()){
+                    if (password_verify($password, $row['user_password'])){
+                        return $query;
+                    }else{
+                        return 'pwd';
+                    }
+                }
+            }else{
+                return 'email';
+            }
+        }
+        public function apivalidateemail( $email ){
+            $query = $this->select('*','obs_users',"user_email='".$email."' and user_status=1",1);
+            $num = $query->num_rows;
+            if ($num> 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        public function apiregister($values){
+            $query = $this->insert("obs_users(user_no,user_firstname,user_lastname,user_email,user_password,user_bio,role_id,user_status,user_createat)","".$values."");
+            if ($query>0){
+               return $this->select("*","obs_users","user_id='".$query."' and user_status=1",1);
+            }else{
+                return false;
+            }
+        }
+        public function apicategories($condition){
+            return $this->select("*","obs_categories","".$condition."","cate_id desc");
+        }
+        public function apidetail($id){
+            $query = $this->select("b.*,c.cate_title,bt.type_title,(SELECT AVG(rate_num) 
+            FROM obs_rating WHERE book_id=".$id.") as rate","obs_books as b 
+            inner join obs_categories as c ON b.category_id=c.cate_id 
+            INNER join obs_booktype as bt on b.type_id=bt.type_id","book_id=".$id."",1);
+            $num = $query->num_rows;
+            if ($num>0){
+                return $query;
+            }else{
+                return false;
+            }
+        }
+        public function apicomment($id){
+            $query = $this->select("c.*,u.user_firstname","obs_comments as c left join obs_users as u on c.user_id=u.user_id","book_id=".$id." and com_status=1",1);
+            $num = $query->num_rows;
+            if ($num>0){
+                return $query;
+            }else{
+                return false;
+            }
+        }
+        public function apiaddcomm($values){
+            $query = $this->insert("obs_comments(com_date,com_text,user_id,book_id,com_status)","".$values."");
+            if ($query > 0){
+                return $this->select("*","obs_comments","com_id='".$query."' and com_status=1",1);
+            }else{
+                return false;
+            }
+        }
+        public function invoice($values) {
+            $result = $this->insert("obs_invoice(invoice_date,invoice_total,invoice_status)","".$values."");
+            if ($result > 0){
+                return $result;
+            }else{
+                return false;
+            }
+        }
+        public function invoicedetail($values){
+            $result = $this->insert("obs_invoice_detail(invoice_id,book_id,invd_price,invd_amount,invd_remark)","".$values."");
+            if ($result > 0){
+                return $result;
+            }else{
+                return false;
+            }
+        }
+        public function userorder($values) {
+            $result = $this->insert("obs_usersorder(order_date,user_id,invoice_id,order_status)","".$values."");
+            if ($result > 0){
+                return $result;
+            }else{
+                return false;
+            }
+        }
+    }
+
+?>
