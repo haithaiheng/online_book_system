@@ -96,6 +96,17 @@
                 return false;
             }
         }
+        public function mybooks($id){
+            $result = $this->select("b.*","obs_usersorder as o inner join obs_invoice as i on o.invoice_id=i.invoice_id
+             inner join obs_invoice_detail as id on i.invoice_id=id.invoice_id inner join obs_books as b on id.book_id=b.book_id",
+            "o.user_id=".$id." and i.invoice_status=1",1);
+            $num = $result->num_rows;
+            if ($num > 0){
+                return $result;
+            }else{
+                return false;
+            }
+        }
     }
 
 ?>

@@ -28,6 +28,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="comment">Comments</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="order">Orders</a>
+                </li>
                 <?php if (!is_null($_SESSION['userid'])){
                 ?>
                 <li class="nav-item ms-auto">
