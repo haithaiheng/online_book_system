@@ -107,6 +107,33 @@
                 return false;
             }
         }
+        public function fetchcategory(){
+            $category = $this->select("*","obs_categories","cate_status=1",1);
+            $num = $category->num_rows;
+            if ($num > 0){
+                return $category;
+            }else{
+                return false;
+            }
+        }
+        public function fetchbookbycate($id){
+            $book = $this->select("*","obs_books","category_id=".$id." and book_status=1","book_id desc limit 0,2");
+            $num = $book->num_rows;
+            if ($num > 0){
+                return $book;
+            }else{
+                return false;
+            }
+        }
+        public function bookbycate($condition, $start, $limit){
+            $book = $this->select("*","obs_books","".$condition."","book_id desc limit ".$start.",".$limit."");
+            $num = $book->num_rows;
+            if ($num > 0){
+                return $book;
+            }else{
+                return false;
+            }
+        }
     }
 
 ?>
