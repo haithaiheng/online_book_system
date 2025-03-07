@@ -11,11 +11,12 @@ $api = new Api();
 $order_date = $data['date'];
 $user_id = $data['userid'];
 $total_amount = $data['amount'];
+$transac = $data['transac'];
 // $detail = json_decode($data['details']);
 
 $message = 'failed';
-//invoice_date,invoice_total,invoice_status
-$invoice = $api->invoice("'".$order_date."','".$total_amount."',1");
+//invoice_date,invoice_total,invoice_transac,invoice_status
+$invoice = $api->invoice("'".$order_date."','".$total_amount."','".$transac."',1");
 if ($invoice > 0){
     foreach($data['details'] as $obj){
         //invoice_id,book_id,invd_price,invd_amount,invd_remark

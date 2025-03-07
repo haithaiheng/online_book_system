@@ -73,7 +73,7 @@
             }
         }
         public function invoice($values) {
-            $result = $this->insert("obs_invoice(invoice_date,invoice_total,invoice_status)","".$values."");
+            $result = $this->insert("obs_invoice(invoice_date,invoice_total,invoice_transac,invoice_status)","".$values."");
             if ($result > 0){
                 return $result;
             }else{
@@ -133,6 +133,9 @@
             }else{
                 return false;
             }
+        }
+        public function updateprofile($values, $id){
+            return $this->update("obs_users","".$values."","user_id=".$id."");
         }
     }
 

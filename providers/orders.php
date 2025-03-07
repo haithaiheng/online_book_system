@@ -2,7 +2,7 @@
     require_once('connection.php');
     class Orders extends Connection{
         public function fetch($condition,$start,$limit){
-            $query = $this->select("o.*,u.user_email,i.invoice_total","obs_usersorder as o inner join obs_users as u on o.user_id=u.user_id
+            $query = $this->select("o.*,u.user_email,i.invoice_total,i.invoice_transac","obs_usersorder as o inner join obs_users as u on o.user_id=u.user_id
                                 inner join obs_invoice as i on o.invoice_id=i.invoice_id","".$condition." and i.invoice_status=1","o.order_id desc limit ".$start.",".$limit."");
             if ($query->num_rows > 0){
                 return $query;

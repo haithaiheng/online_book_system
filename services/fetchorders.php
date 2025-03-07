@@ -18,7 +18,8 @@ if ($result != false){
         'invoice_id'=>$val['invoice_id'],
         'order_status'=>$val['order_status'],
         'user_email'=>$val['user_email'],
-        'invoice_total'=>$val['invoice_total']);
+        'invoice_total'=>$val['invoice_total'],
+        'invoice_transac'=>$val['invoice_transac']);
     }
 }
 $next = $order->fetch($condition,0,1000000);

@@ -23,3 +23,6 @@ ul > li.nav-item > a:hover {
   color: #f1eae0;
   background-color: var(--main-color);
 }
+a{
+  text-decoration: none;
+}

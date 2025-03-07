@@ -23,6 +23,8 @@ include_once('menu.php');
             <th scope="col">User</th>
             <th scope="col">Date</th>
             <th scope="col">Invoice Id</th>
+            <th scope="col">Total Amount</th>
+            <th scope="col">Remark</th>
             <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -43,34 +45,6 @@ $(document).ready(function () {
   var start = 0;
   var limit = 10;
   var page = 1;
-//   $("#save-role").click(function () {
-//     $('form').addClass("was-validated");
-//     var title = $('#role-title').val();
-//     var form = $('form').serialize();
-//     if (title == ''){
-//       return;
-//     }
-//     $.ajax({
-//       method:"POST",
-//       url:"./services/addrole.php",
-//       data:form,
-//       cache:false,
-//       dataType: "json",
-//       success:function(data){
-//         // console.log(data);
-//         if (data.msg == 'add'){
-          
-//         }else if(data.msg == 'update'){
-//           $('#roleModal').modal('hide');
-//         }
-//         fetchorders(start, limit);
-//         $('#role-title').val('');
-//         $('form').removeClass("was-validated");
-//       },error: function(xhr, status, error) {
-//         console.log(xhr.responseText);
-//         }
-//     });
-//   });
   fetchorders(start, limit);
   function fetchorders(start, limit){
     var text = $('#txt-search').val();
@@ -96,6 +70,8 @@ $(document).ready(function () {
             '<td><a href="orderdetail?id='+element['invoice_id']+'" target="_blank">'+ element['user_email']+'<a></td>'+
             '<td>'+ element['order_date']+'</td>'+
             '<td>'+ element['invoice_id']+'</td>'+
+            '<td>$ '+ element['invoice_total']+'</td>'+
+            '<td>'+ element['invoice_transac']+'</td>'+
             '<td>'+ status +'</td>'+
             '<td>'+ action +'</td>'+
             '<tr>';
@@ -133,17 +109,6 @@ $(document).ready(function () {
   $('body').on('keyup','#txt-search',function(){
     fetchorders(start, limit);
   });
-//   $('body').on('click','#edit',function(){
-//     var tr=$(this).parents('tr');
-//     $('#role-id').val(tr.find('td:eq(1)').text());
-//     $('#role-title').val(tr.find('td:eq(2)').text());
-//     $('#exampleModalLabel').text('Edit Role');
-//   });
-//   $('body').on('click','#addnew',function(){
-//     $('#role-id').val(0);
-//     $('#role-title').val('');
-//     $('#exampleModalLabel').text('Add New Role');
-//   });
 //   $('body').on('click','#delete',function(){
 //     var tr = $(this).parents('tr');
 //     var id = tr.find('td:eq(1)').text();
