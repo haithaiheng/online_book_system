@@ -81,7 +81,7 @@
             }
         }
         public function invoicedetail($values){
-            $result = $this->insert("obs_invoice_detail(invoice_id,book_id,invd_price,invd_amount,invd_remark)","".$values."");
+            $result = $this->insert("obs_invoice_detail(invoice_id,book_id,invd_price,invd_amount)","".$values."");
             if ($result > 0){
                 return $result;
             }else{
@@ -117,7 +117,7 @@
             }
         }
         public function fetchbookbycate($id){
-            $book = $this->select("*","obs_books","category_id=".$id." and book_status=1","book_id desc limit 0,2");
+            $book = $this->select("b.*, (select AVG(rate_num) from obs_rating where book_id=b.book_id)as rating","obs_books as b","b.category_id=".$id." and b.book_status=1","b.book_id desc limit 0,2");
             $num = $book->num_rows;
             if ($num > 0){
                 return $book;

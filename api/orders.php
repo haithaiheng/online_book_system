@@ -20,7 +20,7 @@ $invoice = $api->invoice("'".$order_date."','".$total_amount."','".$transac."',1
 if ($invoice > 0){
     foreach($data['details'] as $obj){
         //invoice_id,book_id,invd_price,invd_amount,invd_remark
-        $invoicedetail = $api->invoicedetail("'".$invoice."','".$obj['bookid']."','".$obj['price']."','".$obj['amount']."','".$obj['remark']."'");
+        $invoicedetail = $api->invoicedetail("'".$invoice."','".$obj['bookid']."','".$obj['price']."','".$obj['price']."'");
         if ($invoicedetail > 0){
         }else{
             $message = 'failed';
