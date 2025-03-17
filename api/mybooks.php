@@ -9,15 +9,23 @@ if (!isset($data['userid'])){
 require_once('../providers/api.php');
 $api = new Api();
 $user_id = $data['userid'];
-
+$page =1;
+if (isset($_GET['page'])){
+    $page = $_GET['page'];
+}
+$limit = 10;
+$start = 0;
+if ($page > 1){
+    $start = $start + $limit;
+}
 $message = 'failed';
 $arr = [];
-$result = $api->mybooks($user_id);
+$result = $api->mybooks($user_id,$start,$limit);
 if ($result != false){
     while($row = $result->fetch_assoc()){
         $arr[] = array('book_id'=>$row['book_id'],'book_title'=>$row['book_title']
-        ,'book_desc'=>$row['book_desc'],'book_file'=>$row['book_file']
-        ,'book_thumbnail'=>$row['book_thumbnail']);
+        ,'book_desc'=>$row['book_desc'],'book_file'=>'http://116.212.146.111/obs/uploads/book/'.$row['book_file']
+        ,'book_thumbnail'=>'http://116.212.146.111/obs/uploads/thumbnail/'.$row['book_thumbnail'],'book_category'=>$row['cate_title']);
     }
     $message = 'success';
 }else{
