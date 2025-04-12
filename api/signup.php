@@ -3,7 +3,8 @@
     header('Content-type: application/json');
     $data = json_decode(file_get_contents('php://input'), true);
     if (!isset($data['email'])){
-        echo json_encode(array('message'=>'invalid request'));
+        header("HTTP/1.0 404 Not Found");
+        echo json_encode(array('message'=>'invalid paramater'));
         exit;
     }
 

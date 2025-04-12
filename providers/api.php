@@ -1,5 +1,6 @@
 <?php
     require_once('connection.php');
+    require_once('../__config.php');
     class Api extends Connection {
         public function apibook($condition, $start , $limit){
             return $this->select("b.*,c.cate_title,bt.type_title,(SELECT AVG(rate_num) 
@@ -117,7 +118,7 @@
             }
         }
         public function fetchbookbycate($id){
-            $book = $this->select("b.*, (select AVG(rate_num) from obs_rating where book_id=b.book_id)as rating","obs_books as b","b.category_id=".$id." and b.book_status=1","b.book_id desc limit 0,2");
+            $book = $this->select("b.*,c.cate_title,(select AVG(rate_num) from obs_rating where book_id=b.book_id)as rating","obs_books as b inner join obs_categories as c on b.category_id=c.cate_id","b.category_id=".$id." and b.book_status=1","b.book_id desc limit 0,2");
             $num = $book->num_rows;
             if ($num > 0){
                 return $book;
@@ -126,7 +127,8 @@
             }
         }
         public function bookbycate($condition, $start, $limit){
-            $book = $this->select("*","obs_books","".$condition."","book_id desc limit ".$start.",".$limit."");
+            $book = $this->select("b.*,c.cate_title,(SELECT AVG(rate_num) 
+            FROM obs_rating WHERE book_id=b.book_id) as rate","obs_books as b inner join obs_categories as c on b.category_id=c.cate_id","".$condition."","b.book_id desc limit ".$start.",".$limit."");
             $num = $book->num_rows;
             if ($num > 0){
                 return $book;
@@ -136,6 +138,37 @@
         }
         public function updateprofile($values, $id){
             return $this->update("obs_users","".$values."","user_id=".$id."");
+        }
+        public function getprofile($id){
+            $query = $this->select("*","obs_users","user_id='".$id."' and user_status=1",1);
+            $num = $query->num_rows;
+            if ($num > 0){
+                return $query;
+            }else{
+                return 'email';
+            }
+        }
+        public function forgot($email){
+            $qemail = $this->select("*","obs_users","user_email='".$email."' and user_status=1",1);
+            $num = $qemail->num_rows;
+            if ($num > 0){
+                $six_digit_random_number =  sprintf("%06d", mt_rand(1, 999999));
+                $query = $this->update("obs_users","user_confirmcode='".$six_digit_random_number."'","user_email='".$email."'");
+                if ($query){
+                    return $qemail;
+                }
+                
+            }else{
+                return null;
+            }
+        }
+        public function resetpassword($values, $email){
+            $query = $this->update("obs_users","".$values."","user_email='".$email."'");
+            if ($query){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
 

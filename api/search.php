@@ -1,21 +1,22 @@
 <?php
-if (!isset($_GET['s'])){
-    echo json_encode(array('code'=>404));
-    exit;
-}
-if (!isset($_GET['page'])){
-    $_GET['page'] = 1;
-}
 header('Content-type: application/json');
 require_once('../providers/api.php');
+$data = json_decode(file_get_contents('php://input'), true);
+if (!isset($data['s'])){
+    header("HTTP/1.0 404 Not Found");
+    echo json_encode(array('message'=>'paramaters missing'),true);
+    exit;
+}
 $api = new Api();
-
-$page = $_GET['page'];
-$title = $_GET['s'];
+$page =1;
+if (isset($data['page'])){
+    $page = $data['page'];
+}
+$title = $data['s'];
 $limit = 10;
 $start = 0;
 if ($page > 1){
-    $start = $start + $limit;
+    $start = $limit * ($page -1);
 }
 $condition = "(book_title like '%".$title."%' or cate_title like '%".$title."%' or type_title like '%".$title."%') and book_status=1";
 $query = $api->apibook($condition, $start, $limit);
@@ -26,11 +27,11 @@ if ($num > 0 ){
         $array[] = array('book_id'=>$row['book_id']
         ,'book_title'=>$row['book_title']
         ,'book_desc'=>$row['book_desc']
-        ,'book_file'=>'http://100.65.64.126:8888/obs/uploads/book/'.$row['book_file']
+        ,'book_file'=>$baseurl.'uploads/book/'.$row['book_file']
         ,'book_price'=>$row['book_price']
         ,'book_genre'=>$row['book_genre']
         ,'book_feature'=>$row['book_feature']
-        ,'book_thumbnail'=>'http://100.65.64.126:8888/obs/uploads/thumbnail/'.$row['book_thumbnail']
+        ,'book_thumbnail'=>$baseurl.'uploads/thumbnail/'.$row['book_thumbnail']
         ,'category_id'=>$row['category_id']
         ,'cate_title'=>$row['cate_title']
         ,'type_id'=>$row['type_id']
@@ -41,8 +42,8 @@ if ($num > 0 ){
     }
 }
 $next = $api->apibook($condition,0,1000000);
-$total = round($next->num_rows / $limit);
-$code = $array == [] ?204:200;
-$array = array('total_page'=> $total,'code'=>$code, 'data'=> $array);
+$total = ceil($next->num_rows / $limit);
+$code = $array == [] ?'unfound':'success';
+$array = array('total_page'=> $total,'message'=>$code, 'data'=> $array);
 echo json_encode($array);
 ?>

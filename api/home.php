@@ -20,8 +20,8 @@ while ($row = $catedata->fetch_assoc()){
     if ($bookdata != false){
         while($val = $bookdata->fetch_assoc()){
             $arr[] = array('book_id'=>$val['book_id'],'book_title'=>$val['book_title']
-            ,'book_file'=>$val['book_file'],'book_genre'=>$val['book_genre']
-        ,'book_thumbnail'=>'http://116.212.146.111/obs/uploads/thumbnail/'.$val['book_thumbnail']
+            ,'book_file'=>$baseurl.'uploads/book/'.$val['book_file'],'book_genre'=>$val['book_genre']
+        ,'book_thumbnail'=>$baseurl.'uploads/thumbnail/'.$val['book_thumbnail']
         ,'book_price'=>$val['book_price'],'book_genre'=>$val['book_genre']
         ,'book_feature'=>$val['book_feature'],'rating'=>$val['rating']);
         }
