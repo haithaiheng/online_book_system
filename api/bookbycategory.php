@@ -23,7 +23,7 @@ $bookdata = $api->bookbycate($condition, $start, $limit);
 if ($bookdata != false){
     while($val = $bookdata->fetch_assoc()){
         $arr[] = array('book_id'=>$val['book_id'],'book_title'=>$val['book_title']
-        ,'book_price'=>$val['book_price'],'book_rate'=>$val['rate'],'book_cate'=>$val['cate_title']
+        ,'book_price'=>$val['book_price'],'book_rate'=>$val['rate']==null? 0.0 : number_format($val['rate'],2),'book_cate'=>$val['cate_title']
         ,'book_file'=>$baseurl.'uploads/book/'.$val['book_file'],'book_genre'=>$val['book_genre']
     ,'book_thumbnail'=>$baseurl.'uploads/thumbnail/'.$val['book_thumbnail']);
     }

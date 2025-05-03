@@ -44,9 +44,10 @@
         public function apicategories($condition){
             return $this->select("*","obs_categories","".$condition."","cate_id desc");
         }
-        public function apidetail($id){
+        public function apidetail($id, $uid){
             $query = $this->select("b.*,c.cate_title,bt.type_title,(SELECT AVG(rate_num) 
-            FROM obs_rating WHERE book_id=".$id.") as rate","obs_books as b 
+            FROM obs_rating WHERE book_id=".$id.") as rate, (SELECT COUNT(*) FROM obs_usersorder as uo
+            INNER JOIN obs_invoice_detail as ivd ON uo.invoice_id=ivd.invoice_id WHERE ivd.book_id =".$id." and uo.order_status=1 and uo.user_id=".$uid.") as ordered","obs_books as b 
             inner join obs_categories as c ON b.category_id=c.cate_id 
             INNER join obs_booktype as bt on b.type_id=bt.type_id","book_id=".$id."",1);
             $num = $query->num_rows;

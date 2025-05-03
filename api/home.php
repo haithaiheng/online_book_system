@@ -22,8 +22,8 @@ while ($row = $catedata->fetch_assoc()){
             $arr[] = array('book_id'=>$val['book_id'],'book_title'=>$val['book_title']
             ,'book_file'=>$baseurl.'uploads/book/'.$val['book_file'],'book_genre'=>$val['book_genre']
         ,'book_thumbnail'=>$baseurl.'uploads/thumbnail/'.$val['book_thumbnail']
-        ,'book_price'=>$val['book_price'],'book_genre'=>$val['book_genre']
-        ,'book_feature'=>$val['book_feature'],'rating'=>$val['rating']);
+        ,'book_price'=>number_format($val['book_price'],2),'book_genre'=>$val['book_genre']
+        ,'book_feature'=>$val['book_feature'],'rating'=>number_format((float)$val['rating'],2));
         }
     }
     $finalarr[] = array('categories'=>$catarr,'books'=>$arr);

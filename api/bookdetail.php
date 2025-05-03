@@ -1,15 +1,20 @@
 <?php
-    if (!isset($_GET['id'])){
-        echo json_encode(array('code'=>404));
-        exit;
-    }
+date_default_timezone_set('Asia/Phnom_Penh');
+header('Content-type: application/json');
+$request = json_decode(file_get_contents('php://input'), true);
+if (!isset($request['id']) || !isset($request['uid'])){
+    
+    echo json_encode(array('code'=>404,'message'=>'missing param'));
+    exit;
+}
     require_once('../providers/api.php');
     $api = new Api();
 
-    $id = $_GET['id'];
+    $id = $request['id'];
+    $uid = $request['uid'];
     $data = '';
     $cdata = [];
-    $result = $api->apidetail($id);
+    $result = $api->apidetail($id, $uid);
     $comment = $api->apicomment($id);
     if ($comment){
         while($row = $comment->fetch_assoc()){
@@ -36,7 +41,8 @@
             ,'type_title'=>$row['type_title']
             ,'book_createat'=>$row['book_createat']
             ,'book_status'=>$row['book_status']
-            ,'book_rate'=>$row['rate']==null? 0:$row['rate']
+            ,'book_rate'=>$row['rate']== null? "0":number_format($row['rate'],2)
+            ,'ordered'=>$row['ordered']== 0? false: true
             ,'comments'=>$cdata);
         }
     }
